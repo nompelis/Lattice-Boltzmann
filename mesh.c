@@ -6,6 +6,13 @@
 #include "mesh.h"
 
 
+//
+// Function to make a notional, generic "box" for any kind of use that needs
+// a Cartesian-style discretization defined by "start -> end" points in 3D
+// and number of nodes in each direction.
+// (This function does not do much, but it may get extendedin the future...)
+//
+
 int make_box( struct box_s* p )
 {
    if( p == NULL ) return 1;

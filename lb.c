@@ -29,7 +29,10 @@ const vec3_t e_D3Q19[] = {
 };
 
 
-// initialization of structures
+//
+// Function to initialize a Lattice-boltzmann structure
+//
+
 int lb_init( struct lb_s* p )
 {
    if( p == NULL ) return 1;
@@ -54,7 +57,11 @@ int lb_init( struct lb_s* p )
 }
 
 
-// initial conditions
+//
+// Function to establish the initial condition's distribution from a velocity
+// field.
+//
+
 int lb_initCond( struct lb_s* p, const double* u_ )
 {
    if( p == NULL ) return 1;
@@ -89,6 +96,7 @@ int lb_initCond( struct lb_s* p, const double* u_ )
                                            - u2/(2.0*cs*cs) );
       }
 #ifdef _DEBUG2_
+      // diagnostics to visualize a cell's distribution; hardwired to cell 0
       if( i == 0 ) {
          printf(" ----- Distribution lattice for a cell ---- \n");
          printf(" == k=far (low) plane == \n");

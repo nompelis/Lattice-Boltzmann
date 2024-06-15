@@ -11,6 +11,8 @@ extern "C" {
 #endif
 
 
+// a structure to store information about a generic Cartesian box
+// (has redundancy via the dx,dy,dz for efficiency)
 struct box_s {
    int im,jm,km;
    double xs[3],xe[3];
@@ -18,7 +20,7 @@ struct box_s {
 };
 
 
-
+// a function to establish a Cartesian box
 int make_box( struct box_s* p );
 
 

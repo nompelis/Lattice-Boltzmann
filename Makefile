@@ -8,6 +8,7 @@
 
  LIBS = -lm
 
+##### targets #####
 all:
 	$(CC) -c $(COPTS) $(DEBUG) mesh.c
 	$(CC) -c $(COPTS) $(DEBUG) lb.c
