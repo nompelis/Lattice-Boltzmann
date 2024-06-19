@@ -80,7 +80,7 @@ int lb_initCond( struct lb_s* p, const double* u_ )
 
    for(int i=0;i<(int) ((im-1)*(jm-1)*(km-1));++i) {
       struct lattice_s* t = &(lp[i]);
-      const double* uu = &( u_[i] );
+      const double* uu = &( u_[3*i] );
 #ifdef _DEBUG2_
       printf(" u[%d] = %lf %lf %lf \n",i, uu[0], uu[1], uu[2] ); 
 #endif
