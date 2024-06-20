@@ -29,6 +29,15 @@ int main( int argc, char *argv[])
    }
    lb_initCond( &lb1, (const double*) lb1.u );
 
+   // test recovery of density and momenta
+   for(int i=0;i<(int) ((b.im-1)*(b.jm-1)*(b.km-1));++i) {
+      double rho;
+      vec3_t ruvw;
+
+      lb_recoverRU( &lb1, &( lb1.lattice[i] ), &rho, ruvw );
+      printf(" Rho: %lf  Ruvw: %lf %lf %lf \n", rho, ruvw[0],ruvw[1],ruvw[2] );
+   }
+
    return 0;
 }
 

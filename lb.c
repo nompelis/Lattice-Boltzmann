@@ -24,6 +24,7 @@ const vec3_t e_D3Q19[] = {
   { 0.0,  0.0,  1.0}, { 0.0,  0.0, -1.0},
 
   { 1.0, 1.0, 0.0}, {-1.0, 1.0, 0.0}, { 1.0,-1.0, 0.0}, {-1.0,-1.0, 0.0},
+
   { 1.0, 0.0, 1.0}, {-1.0, 0.0, 1.0}, { 1.0, 0.0,-1.0}, {-1.0, 0.0,-1.0},
   { 0.0, 1.0, 1.0}, { 0.0,-1.0, 1.0}, { 0.0, 1.0,-1.0}, { 0.0,-1.0,-1.0}
 };
@@ -78,7 +79,8 @@ int lb_initCond( struct lb_s* p, const double* u_ )
    int ilat = p->ilat;
 
    double rho = 1.0; // arbitrary density
-   double cs = 9.9;  // HACK (speed of sound in the lattice)
+   const double cs = 1.0/sqrt(3.0);  // speed of sound in the lattice
+   const double cs2 = cs*cs, cs4 = cs2*cs2;
 
    for(int i=0;i<(int) ((im-1)*(jm-1)*(km-1));++i) {
       struct lattice_s* t = &(lp[i]);
@@ -88,14 +90,13 @@ int lb_initCond( struct lb_s* p, const double* u_ )
 #endif
 
       for(int n=0;n<ilat;++n) {
-         double* ee = (double*) &( e_D3Q19[n] );       // re-cast
-
+         double* ee = (double*) p->elat[n];
          double eu = ee[0]*uu[0] + ee[1]*uu[1] + ee[2]*uu[2];
          double u2 = uu[0]*uu[0] + uu[1]*uu[1] + uu[2]*uu[2];
 
          t->f[n] = w_D3Q19[n] * rho * (1.0 + eu/(cs*cs)
-                                           + eu*eu/(2.8*cs*cs*cs*cs)
-                                           - u2/(2.0*cs*cs) );
+                                           + eu*eu/(2.0*cs4)
+                                           - u2/(2.0*cs2) );
       }
 #ifdef _DEBUG2_
       // diagnostics to visualize a cell's distribution; hardwired to cell 0
