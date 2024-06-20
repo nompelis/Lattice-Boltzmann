@@ -21,4 +21,11 @@ following convention:
       z /                                                        front        |
 ```
 
+______________________________________________________________________________
+`` References ``
+
+[1] Alessandro De Rosis & Christophe Coreixas, "Multiphysics flow simulations
+    using D3Q19 lattice Boltzmann methods based on central moments," Physics
+    of Fluids 32, 117101 (2020)
+
 (To be continued)
