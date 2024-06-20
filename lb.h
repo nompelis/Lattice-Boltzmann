@@ -27,8 +27,10 @@ struct lattice_s {
 // a structure to store an LB simulation's settings and data
 struct lb_s {
    struct box_s* box;
+   const vec3_t* elat;
+   const double* wlat;
+   int ilat;
    struct lattice_s* lattice;
-   int il;
    double* u;
 
 };
@@ -41,6 +43,11 @@ int lb_init( struct lb_s* p );
 
 // a function to store the initial condition distribution from a velocity field
 int lb_initCond( struct lb_s* p, const double* u_ );
+
+// get density and momenta at a single cell
+void lb_recoverRU( const struct lb_s* p,
+                   const struct lattice_s* lattice,
+                   double* rho, double* ruvw );
 
 
 #ifdef __cplusplus

@@ -43,7 +43,9 @@ int lb_init( struct lb_s* p )
    struct box_s* bp = p->box;
    int im = bp->im, jm = bp->jm, km = bp->km;
 
-   p->il = 19;
+   p->elat = e_D3Q19;
+   p->wlat = w_D3Q19;
+   p->ilat = 19;
    size_t isize = (size_t) ((im-1)*(jm-1)*(km-1));
 
    p->lattice = (struct lattice_s*) malloc( isize*sizeof(struct lattice_s) );
@@ -73,7 +75,7 @@ int lb_initCond( struct lb_s* p, const double* u_ )
    struct lattice_s* lp = p->lattice;
 
    int im = bp->im, jm = bp->jm, km = bp->km;
-   int il = p->il;
+   int ilat = p->ilat;
 
    double rho = 1.0; // arbitrary density
    double cs = 9.9;  // HACK (speed of sound in the lattice)
@@ -85,7 +87,7 @@ int lb_initCond( struct lb_s* p, const double* u_ )
       printf(" u[%d] = %lf %lf %lf \n",i, uu[0], uu[1], uu[2] ); 
 #endif
 
-      for(int n=0;n<il;++n) {
+      for(int n=0;n<ilat;++n) {
          double* ee = (double*) &( e_D3Q19[n] );       // re-cast
 
          double eu = ee[0]*uu[0] + ee[1]*uu[1] + ee[2]*uu[2];
@@ -117,5 +119,32 @@ int lb_initCond( struct lb_s* p, const double* u_ )
    }
 
    return 0;
+}
+
+
+//    
+// Function to calculate density and momenta from the distribution
+// at a given cell
+//    
+
+void lb_recoverRU( const struct lb_s* p,
+                   const struct lattice_s* lattice,
+                   double* rho, double* ruvw )
+{        
+   const int ilat = p->ilat;    
+
+   double r = 0.0;
+   double _ruvw[3] = { 0.0, 0.0, 0.0 };
+   for(int n=0;n<ilat;++n) {
+      const double f = lattice->f[n];
+      r += f;
+      _ruvw[0] += f * p->elat[n][0];
+      _ruvw[1] += f * p->elat[n][1];
+      _ruvw[2] += f * p->elat[n][2];
+   }
+   *rho = r;
+   ruvw[0] = _ruvw[0];
+   ruvw[1] = _ruvw[1];
+   ruvw[2] = _ruvw[2];
 }
 
